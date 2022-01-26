@@ -1,7 +1,12 @@
 # Google Tag Manager Criteo User Identification Tag
 
-Criteo User Identification Tag based on the example community template.
+This Web Tag runs on the advertiser website, calls Criteo Identification Services and stores the result in 2 first party cookies : 
 
-The example-community-template project is an example of a Google Tag Manager [Community Template Gallery template repository](https://support.google.com/tagmanager/answer/9454109) repository that can be used as a template to generate new community template repositories.
+* **crto_mapped_user_id** : id of the user retrieved by Criteo
+* **crto_is_user_optout** : information about if the user has opted-out of Criteo Retargeting
 
-To submit your own template, see the [detailed instructions on how to submit templates to the Community Template Gallery](https://developers.google.com/tag-manager/templates/gallery).
+Both of these cookies have a life duration of 3 days, and no additional calls to Criteo Services are made if the cookies are already present.
+
+# Installation
+
+Please get in touch with your Criteo Account Strategist to get your **callerId**, the only parameter for this Tag which is used for User Identification.
