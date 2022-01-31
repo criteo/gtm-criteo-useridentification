@@ -326,11 +326,35 @@ ___WEB_PERMISSIONS___
 
 ___TESTS___
 
-scenarios: []
+scenarios:
+- name: User Identification Endpoint is called
+  code: |-
+    // Call runCode to run the template's code.
+    runCode(mockConfiguration);
+
+    // Verify that the tag finished successfully.
+    assertApi('injectScript').wasCalledWith(rtusScriptLocation);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: on User Already Identified, don't call User Identification endpoint
+  code: |-
+    mock('getCookieValues', (cookieName) => {
+          if(cookieName === 'crto_mapped_user_id') return ['mapped_user_id'];
+    });
+
+    // Call runCode to run the template's code.
+    runCode(mockConfiguration);
+
+    // Verify that the tag finished successfully.
+    assertApi('injectScript').wasNotCalled();
+    assertApi('gtmOnSuccess').wasCalled();
+setup: |
+  const rtusScriptLocation = "https://gum.criteo.com/sync?c=123&r=2&a=1&j=crto_callback";
+
+  const mockConfiguration = {
+      callerId: '123'
+  };
 
 
 ___NOTES___
 
-Created on 25/01/2022, 16:14:28
-
-
+Created on 31/01/2022, 10:58:48
