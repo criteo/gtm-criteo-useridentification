@@ -15,5 +15,9 @@
 homepage: "https://www.criteo.com"
 documentation: "https://github.com/criteo/gtm-criteo-useridentification/blob/main/README.md"
 versions:
+  # Latest version
+  - sha: bc139cfe351899b952a93e2554faf655e7434400
+    changeNotes: Updated tag's description
+  # Older versions
   - sha: 28d34e70252b02897299fafbae5118ab8e5b4de5
     changeNotes: Initial Version
