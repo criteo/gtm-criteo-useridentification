@@ -1,4 +1,4 @@
-# Copyright 2021 Criteo
+# Copyright 2024 Criteo
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,10 @@
 homepage: "https://www.criteo.com"
 documentation: "https://github.com/criteo/gtm-criteo-useridentification/blob/main/README.md"
 versions:
-  # Latest version
+  # Enabled PSB APIs
+  - sha: 6155072243cd6da05aba580755b5f9eedf8e4c38
+    changeNotes: Enabled PSB APIs
+  # Previous version
   - sha: bc139cfe351899b952a93e2554faf655e7434400
     changeNotes: Updated tag's description
   # Older versions
