@@ -1,6 +1,6 @@
 # Google Tag Manager Criteo User Identification Tag
 
-The purpose of this tag is to call Criteo Identification Services and store the result in 2 first party cookies : 
+The purpose of this tag is to call Criteo Identification Services, enable PSB APIs and store the result in 2 first party cookies : 
 
 * **crto_mapped_user_id** : id of the user retrieved by Criteo
 * **crto_is_user_optout** : information about if the user has opted-out of Criteo Retargeting
@@ -9,4 +9,4 @@ The lifetime of these cookies is 3 days, and no additional calls to Criteo Servi
 
 # Installation
 
-Please get in touch with your Criteo contact to get your **callerId**, the only parameter for this Tag which is used for User Identification.
+Please get in touch with your Criteo contact to get your **callerId** and **partnerId**, two parameters for this Tag which is used for User Identification.

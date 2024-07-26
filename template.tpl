@@ -1,4 +1,4 @@
-﻿___TERMS_OF_SERVICE___
+___TERMS_OF_SERVICE___
 
 By creating or modifying this file you agree to Google Tag Manager's Community
 Template Gallery Developer Terms of Service available at
@@ -39,6 +39,24 @@ ___TEMPLATE_PARAMETERS___
         "type": "POSITIVE_NUMBER"
       }
     ]
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "psbEnabled",
+    "displayName": "Enable PSB APIs",
+    "simpleValueType": true,
+    "defaultValue": true
+  },
+  {
+    "type": "TEXT",
+    "name": "partnerId",
+    "displayName": "Partner Id",
+    "simpleValueType": true,
+    "valueValidators": [
+      {
+        "type": "POSITIVE_NUMBER"
+      }
+    ]
   }
 ]
 
@@ -51,10 +69,13 @@ const getCookieValues = require('getCookieValues');
 const setInWindow = require('setInWindow');
 
 const CALLBACK_NAME = "crto_callback";
+const PSB_ENABLED = data.psbEnabled;
 const CALLERID = data.callerId;
+const PARTNER_ID = data.partnerId;
 const COOKIE_NAME = "crto_mapped_user_id";
 const OPTOUT_COOKIE = "crto_is_user_optout";
-const rtusScriptLocation = "https://gum.criteo.com/sync?c=" + CALLERID + "&r=2&a=1&j=" + CALLBACK_NAME;
+const rtusScriptLocation = PSB_ENABLED ? "https://dynamic.criteo.com/rtus?p=" + PARTNER_ID + "&c=" + CALLERID + "&j=" + CALLBACK_NAME
+  : "https://gum.criteo.com/sync?c=" + CALLERID + "&r=2&a=1&j=" + CALLBACK_NAME;
 
 let isUserAlreadyIdentified = getCookieValues(COOKIE_NAME).length !== 0;
 
@@ -74,7 +95,7 @@ setInWindow(CALLBACK_NAME, function(rtusResponse) {
     }
 }, true);
 
-if (!isUserAlreadyIdentified) {
+if (!isUserAlreadyIdentified || PSB_ENABLED) {
   injectScript(rtusScriptLocation);
 }
 
@@ -100,6 +121,10 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "https://gum.criteo.com/*"
+              },
+              {
+                "type": 1,
+                "string": "https://dynamic.criteo.com/*"
               }
             ]
           }
@@ -327,34 +352,65 @@ ___WEB_PERMISSIONS___
 ___TESTS___
 
 scenarios:
-- name: User Identification Endpoint is called
+- name: User Identification Endpoint is called, PSB disabled
   code: |-
     // Call runCode to run the template's code.
-    runCode(mockConfiguration);
+    runCode(mockConfigurationPsbDisabled);
 
     // Verify that the tag finished successfully.
-    assertApi('injectScript').wasCalledWith(rtusScriptLocation);
+    assertApi('injectScript').wasCalledWith(rtusScriptLocationPsbDisabled);
     assertApi('gtmOnSuccess').wasCalled();
-- name: on User Already Identified, don't call User Identification endpoint
+- name: on User Already Identified, don't call User Identification endpoint, PSB disabled
   code: |-
     mock('getCookieValues', (cookieName) => {
           if(cookieName === 'crto_mapped_user_id') return ['mapped_user_id'];
     });
 
     // Call runCode to run the template's code.
-    runCode(mockConfiguration);
+    runCode(mockConfigurationPsbDisabled);
 
     // Verify that the tag finished successfully.
     assertApi('injectScript').wasNotCalled();
     assertApi('gtmOnSuccess').wasCalled();
-setup: |
-  const rtusScriptLocation = "https://gum.criteo.com/sync?c=123&r=2&a=1&j=crto_callback";
+- name: User Identification Endpoint is called, PSB enabled
+  code: |-
+    // Call runCode to run the template's code.
+    runCode(mockConfigurationPsbEnabled);
 
-  const mockConfiguration = {
-      callerId: '123'
+    // Verify that the tag finished successfully.
+    assertApi('injectScript').wasCalledWith(rtusScriptLocationPsbEnabled);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: on User Already Identified, call User Identification endpoint, PSB enabled
+  code: |-
+    mock('getCookieValues', (cookieName) => {
+          if(cookieName === 'crto_mapped_user_id') return ['mapped_user_id'];
+    });
+
+    // Call runCode to run the template's code.
+    runCode(mockConfigurationPsbEnabled);
+
+    // Verify that the tag finished successfully.
+    assertApi('injectScript').wasCalledWith(rtusScriptLocationPsbEnabled);
+    assertApi('gtmOnSuccess').wasCalled();
+setup: |-
+  const rtusScriptLocationPsbDisabled = "https://gum.criteo.com/sync?c=123&r=2&a=1&j=crto_callback";
+
+  const mockConfigurationPsbDisabled = {
+      callerId: '123',
+      psbEnabled: false,
+      partnerId: '456'
+  };
+
+  const rtusScriptLocationPsbEnabled = "https://dynamic.criteo.com/rtus?p=456&c=123&j=crto_callback";
+
+  const mockConfigurationPsbEnabled = {
+      callerId: '123',
+      psbEnabled: true,
+      partnerId: '456'
   };
 
 
 ___NOTES___
 
 Created on 31/01/2022, 10:58:48
+Updated on 26/07/2024, 12:00:00
