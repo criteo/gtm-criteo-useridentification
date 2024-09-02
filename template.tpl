@@ -74,7 +74,7 @@ const CALLERID = data.callerId;
 const PARTNER_ID = data.partnerId;
 const COOKIE_NAME = "crto_mapped_user_id";
 const OPTOUT_COOKIE = "crto_is_user_optout";
-const rtusScriptLocation = PSB_ENABLED ? "https://dynamic.criteo.com/rtus?p=" + PARTNER_ID + "&c=" + CALLERID + "&j=" + CALLBACK_NAME
+const rtusScriptLocation = PSB_ENABLED ? "https://dynamic.criteo.com/js/ld/s2s.js?p=" + PARTNER_ID + "&c=" + CALLERID + "&j=" + CALLBACK_NAME
   : "https://gum.criteo.com/sync?c=" + CALLERID + "&r=2&a=1&j=" + CALLBACK_NAME;
 
 let isUserAlreadyIdentified = getCookieValues(COOKIE_NAME).length !== 0;
@@ -401,7 +401,7 @@ setup: |-
       partnerId: '456'
   };
 
-  const rtusScriptLocationPsbEnabled = "https://dynamic.criteo.com/rtus?p=456&c=123&j=crto_callback";
+  const rtusScriptLocationPsbEnabled = "https://dynamic.criteo.com/js/ld/s2s.js?p=456&c=123&j=crto_callback";
 
   const mockConfigurationPsbEnabled = {
       callerId: '123',
