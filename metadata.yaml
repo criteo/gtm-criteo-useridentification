@@ -15,6 +15,9 @@
 homepage: "https://www.criteo.com"
 documentation: "https://github.com/criteo/gtm-criteo-useridentification/blob/main/README.md"
 versions:
+  # Fixup Dynamic/S2SLoader endpoint
+  - sha: 3b814dce7b1aa8c1f66b2c231a91c3583c9ff6ad
+    changeNotes: Fixup Dynamic/S2SLoader endpoint
   # Enabled PSB APIs
   - sha: 6155072243cd6da05aba580755b5f9eedf8e4c38
     changeNotes: Enabled PSB APIs
